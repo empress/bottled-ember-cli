@@ -10,29 +10,45 @@
 // Provide a title to the process in `ps`
 process.title = 'ember';
 
+const { join, dirname } = require('path');
+
 var resolve = require('resolve');
 var logger = require('heimdalljs-logger')('ember-cli:bin');
 
 var basedir = process.cwd();
+
+console.log('im running now in ', basedir);
+
 logger.info('Resolving "ember-cli" from %j...', basedir);
 
-var projectLocalCli;
-try {
-  projectLocalCli = resolve.sync('bottled-ember-cli', {
-    basedir: basedir
-  });
-} catch(ignored) {}
+// const cliPath = resolve.sync('bottled-ember-cli');
 
-logger.info('Resolved "ember-cli" to %j', projectLocalCli);
+// console.log({cliPath});
 
-// Load `ember-cli` either from the project-local path, or if it could not
-// be resolved use the global version
-logger.info('Loading "ember-cli"...');
-var cli = require(projectLocalCli || '../lib/cli');
+// const Project = require(join(__dirname, '../models/project'));
+
+// console.log({Project});
+
+// Project._closestSync = Project.closestSync;
+
+// Project.closestSync = (pathName, _ui, _cli) => {
+//   return Project._closestSync(__dirname, _ui, _cli);
+// }
+
+
+
+// require.cache[require.resolve(join(dirname(cliPath), '../models/project'))].exports.prototype.isEmberCLIProject = function isEmberCLIProject() {
+//   console.log('in my override');
+//   return true;
+// };
+
+const cli = require(join(__dirname, '../'));
+
+console.log('blah!!!!');
 
 logger.info('Starting "ember-cli"...');
 cli({
-  cliArgs: process.argv.slice(2),
+  cliArgs: ['serve', '--output-path=bottled-dist'],
   inputStream: process.stdin,
   outputStream: process.stdout,
   errorStream: process.stderr
